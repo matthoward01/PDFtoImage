@@ -25,23 +25,26 @@ public class Main {
 		System.out.println("2. JPG");
 		String fileType = in.nextLine();
 		fileType = fileTypes(fileType);
-		System.out.println(fileType);
-		System.out.println("What color Space?");
+		//System.out.println(fileType);
+		System.out.println("What color Space? Ex. 2");
 		System.out.println("1. RGB");
 		System.out.println("2. GRAYSCALE");		
 		String colorSpace = in.nextLine();
 		ImageType colorS = colorSpaces(colorSpace);
 		System.out.println("What DPI? Ex. 300");
 		int dpi = Integer.parseInt(in.nextLine());
+		System.out.println("");
+		System.out.println("-------------------------------------------");
 		
 		for (File f : fileList)
 		{
 			String fName = f.getName();			
 			if(fName.toLowerCase().endsWith(".pdf"))
 			{
-				System.out.println(f.getName());
-				
+				System.out.println("Working on " + f.getName() + "...");
+				System.out.println("-------------------------------------------");
 				convertToIMG(inFolder, f.getCanonicalPath(), fileType, colorS, dpi, outFolder);
+				System.out.println("-------------------------------------------");
 			}
 		}
 		
@@ -63,14 +66,13 @@ public class Main {
 	
 	private static String fileTypes(String fileType)
 	{
-		fileType = ".png";
-
+		String newFileType = ".png";		
 		if(fileType.equals("2"))
 		{
-			fileType = ".jpg";
+			newFileType = ".jpg";
 		}
 		
-		return fileType;
+		return newFileType;
 	}
 	
 	private static File[] getFiles(String path)
@@ -86,15 +88,13 @@ public class Main {
 		Path path = Paths.get(pdfFileName);
 		PDDocument document = PDDocument.load(new File(pdfFileName));
 		PDFRenderer pdfRenderer = new PDFRenderer(document);
+		System.out.println(fileType);
 		for (int page = 0; page < document.getNumberOfPages(); ++page)
 		{ 
 		    BufferedImage bim = pdfRenderer.renderImageWithDPI(page, dpi, imageType);
 
 		    System.out.println(path.getFileName() + "-" + (page+1) + " is done...");
-		    // suffix in filename will be used as the file format
-		    //ImageIO.write(bim, fileType, new File(outFolder + "/" + pdfFileName + "-" + (page+1) + fileType));
 		    ImageIOUtil.writeImage(bim, outFolder + "/" + path.getFileName() + "-" + (page+1) + fileType, dpi);
-		    //Files.move(Paths.get(pdfFileName + "-" + (page+1) + fileType), Paths.get(outFolder + "/" + pdfFileName + "-" + (page+1) + fileType), StandardCopyOption.REPLACE_EXISTING);
 		}
 		
 		document.close();
