@@ -19,18 +19,20 @@ public class Main {
 		File[] fileList = getFiles(inFolder);
 		new File(inFolder + "/Output").mkdirs();
 		String outFolder = inFolder + "/Output";
-		
+		System.out.println("");
 		System.out.println("Convert to what Filetype? Ex. 1");
 		System.out.println("1. PNG");
 		System.out.println("2. JPG");
 		String fileType = in.nextLine();
 		fileType = fileTypes(fileType);
 		//System.out.println(fileType);
+		System.out.println("");
 		System.out.println("What color Space? Ex. 2");
 		System.out.println("1. RGB");
 		System.out.println("2. GRAYSCALE");		
 		String colorSpace = in.nextLine();
 		ImageType colorS = colorSpaces(colorSpace);
+		System.out.println("");
 		System.out.println("What DPI? Ex. 300");
 		int dpi = Integer.parseInt(in.nextLine());
 		System.out.println("");
@@ -46,9 +48,7 @@ public class Main {
 				convertToIMG(inFolder, f.getCanonicalPath(), fileType, colorS, dpi, outFolder);
 				System.out.println("-------------------------------------------");
 			}
-		}
-		
-		
+		}	
 		
 		in.close();
 
@@ -88,17 +88,13 @@ public class Main {
 		Path path = Paths.get(pdfFileName);
 		PDDocument document = PDDocument.load(new File(pdfFileName));
 		PDFRenderer pdfRenderer = new PDFRenderer(document);
-		System.out.println(fileType);
 		for (int page = 0; page < document.getNumberOfPages(); ++page)
 		{ 
 		    BufferedImage bim = pdfRenderer.renderImageWithDPI(page, dpi, imageType);
-
 		    System.out.println(path.getFileName() + "-" + (page+1) + " is done...");
 		    ImageIOUtil.writeImage(bim, outFolder + "/" + path.getFileName() + "-" + (page+1) + fileType, dpi);
-		}
-		
-		document.close();
-		
+		}		
+		document.close();		
 	}
 
 }
